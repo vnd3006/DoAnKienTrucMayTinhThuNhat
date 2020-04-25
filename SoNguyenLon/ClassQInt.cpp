@@ -18,7 +18,7 @@ void QInt::setBit(int i, bool bit)
 {
 
 	if (bit == 0)
-		data[i / 32] = !(1 << (31 - i)) & data[i / 32];
+		data[i / 32] = (!(1 << (31 - i))) & data[i / 32];
 	else
 		data[i / 32] = (1 << (31 - i)) | data[i / 32];
 
