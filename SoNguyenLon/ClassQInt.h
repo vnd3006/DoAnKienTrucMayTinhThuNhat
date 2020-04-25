@@ -10,6 +10,8 @@ class QInt
 
 private:
 	int data[4];
+	//vector binData luu tru so QInt o dang nhi phan
+	vector<bool> binData;
 public:
 	QInt();
 	void ScanQInt();
