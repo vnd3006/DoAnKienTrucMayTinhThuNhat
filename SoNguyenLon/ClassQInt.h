@@ -10,12 +10,12 @@ private:
 	int data[4];
 public:
 	QInt();
-	void ScanQInt(QInt& x);
-	void PrintQInt(QInt& x);
-	bool* DecToBin(QInt x);
+	void ScanQInt();
+	void PrintQInt();
+	bool* DecToBin();
 	QInt BinToDec(bool* bit);
 	char* BinToHex(bool* bit);
-	char* DecToHex(QInt x);
+	char* DecToHex();
 	QInt operator+(const QInt& x);
 	QInt operator-(const QInt& x);
 	QInt operator*(const QInt& x);

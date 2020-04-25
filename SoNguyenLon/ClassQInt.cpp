@@ -7,21 +7,21 @@ QInt::QInt()
 
 }
 
-void QInt::ScanQInt(QInt& x)
+void QInt::ScanQInt()
 {
 
 
 
 }
 
-void QInt::PrintQInt(QInt& x)
+void QInt::PrintQInt()
 {
 
 
 
 }
 
-bool* QInt::DecToBin(QInt x)
+bool* QInt::DecToBin()
 {
 
 	return nullptr;
@@ -42,7 +42,7 @@ char* QInt::BinToHex(bool* bit)
 
 }
 
-char* QInt::DecToHex(QInt x)
+char* QInt::DecToHex()
 {
 
 	return nullptr;
