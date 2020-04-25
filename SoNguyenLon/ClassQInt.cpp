@@ -7,72 +7,152 @@ QInt::QInt()
 
 }
 
-void QInt::ScanQInt()
+bool QInt::getBit(int i)
+{
+
+	return (data[i / 32] >> (31 - i % 32)) & 1;
+
+}
+
+void QInt::setBit(int i, bool bit)
+{
+
+	if (bit == 0)
+		data[i / 32] = !(1 << (31 - i)) & data[i / 32];
+	else
+		data[i / 32] = (1 << (31 - i)) | data[i / 32];
+
+}
+
+QInt QInt::reverseBit()
+{
+
+	QInt temp;
+	for (int i = 0; i < 128; i++)
+		temp.setBit(i, (this->getBit(i) + 1) % 2);
+	return temp;
+
+}
+
+void QInt::convertDecToQInt(string s)
 {
 
 
 
 }
 
-void QInt::PrintQInt()
+string QInt::convertQIntToDec()
 {
 
 
 
 }
 
-vector<bool> QInt::DecToBin(string s)
+vector<bool> QInt::convertDecToBin(string s)
 {
 
-	
+
 
 }
 
-string QInt::BinToDec(vector<bool> bit)
+string QInt::convertBinToDec(vector<bool> bit)
 {
 
-	
+
 
 }
 
-string QInt::BinToHex(vector<bool> bit)
+string QInt::convertBinToHex(vector<bool> bit)
 {
 
-	return DecToHex(BinToDec(bit));
+	return convertDecToHex(convertBinToDec(bit));
 
 }
 
-string QInt::DecToHex(string s)
+string QInt::convertDecToHex(string s)
 {
 
-	
+	/*string ans = "", s1;
+	pair<QInt, QInt> temp;
+	QInt a, b;
+	b.convertDecToQInt("16");
+	while (s != "0")
+	{
+
+		a.convertDecToQInt(s);
+		temp = a / b;
+		s1 = temp.second.convertQIntToDec(); //So du
+		if (s1.length() == 1) //So du tu 0 den 9 (tuong ung tu 0 den 9 trong he hex)
+			s = s1 + s;
+		else //So du tu 10 den 15 (tuong ung tu A den F trong he hex)
+			s = (char)(s1[1] + 'A' - '0') + s;
+		s = temp.first.convertQIntToDec(); //Thuong
+
+	}*/
+	return s;
 
 }
 
-QInt QInt::operator+(const QInt& x)
+QInt QInt::operator+(QInt x)
+{
+
+	QInt temp;
+	/*char nho = 0, s;
+	for (int i = 0; i < 128; i++)
+	{
+
+		s = this->getBit(i) + x.getBit(i) + nho;
+		if (s == 2)
+		{
+
+			temp.setBit(i, 0);
+			nho = 1;
+
+		}
+		else if (s == 3)
+		{
+
+			temp.setBit(i, 1);
+			nho = 1;
+
+		}
+		else
+		{
+
+			temp.setBit(i, nho);
+			nho = 0;
+
+		}
+
+	}*/
+	return temp;
+
+}
+
+QInt QInt::operator-(QInt x)
+{
+
+	//x dao bit de tao ra so bu 1 la a
+	QInt a = x.reverseBit(), b;
+	//b la so 1
+	b.convertDecToQInt("1");
+	//a la so bu 2 bang cach lay so bu 1 cong voi 1
+	a = a + b;
+	//- x bay gio tuong duong voi + a vi a la so doi cua x
+	return *this + a;
+
+}
+
+QInt QInt::operator*(QInt x)
 {
 
 	return QInt();
 
 }
 
-QInt QInt::operator-(const QInt& x)
+pair<QInt, QInt> QInt::operator/(QInt x)
 {
 
-	return QInt();
 
-}
-
-QInt QInt::operator*(const QInt& x)
-{
-
-	return QInt();
-
-}
-
-pair<QInt, QInt> QInt::operator/(const QInt& x)
-{
-
-	
 
 }
