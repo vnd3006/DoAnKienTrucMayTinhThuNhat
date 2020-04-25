@@ -10,7 +10,7 @@ class QInt
 
 private:
 	int data[4];
-	//vector binData luu tru so QInt o dang nhi phan
+	//Vector binData luu tru so QInt o dang nhi phan
 	vector<bool> binData;
 public:
 	QInt();
@@ -23,7 +23,8 @@ public:
 	QInt operator+(const QInt& x);
 	QInt operator-(const QInt& x);
 	QInt operator*(const QInt& x);
-	QInt operator/(const QInt& x);
+	//Cap gia tri QInt tra ve trong phep chia la cap thuong va so du
+	pair<QInt, QInt> operator/(const QInt& x);
 
 };
 

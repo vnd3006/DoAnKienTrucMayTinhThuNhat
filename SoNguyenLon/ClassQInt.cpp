@@ -70,9 +70,9 @@ QInt QInt::operator*(const QInt& x)
 
 }
 
-QInt QInt::operator/(const QInt& x)
+pair<QInt, QInt> QInt::operator/(const QInt& x)
 {
 
-	return QInt();
+	
 
 }
