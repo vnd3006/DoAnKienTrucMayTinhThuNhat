@@ -21,31 +21,31 @@ void QInt::PrintQInt()
 
 }
 
-bool* QInt::DecToBin()
+vector<bool> QInt::DecToBin(string s)
 {
 
-	return nullptr;
+	
 
 }
 
-QInt QInt::BinToDec(bool* bit)
+string QInt::BinToDec(vector<bool> bit)
 {
 
-	return QInt();
+	
 
 }
 
-char* QInt::BinToHex(bool* bit)
+string QInt::BinToHex(vector<bool> bit)
 {
 
-	return nullptr;
+	return DecToHex(BinToDec(bit));
 
 }
 
-char* QInt::DecToHex()
+string QInt::DecToHex(string s)
 {
 
-	return nullptr;
+	
 
 }
 

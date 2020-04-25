@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <vector>
+#include <string>
 
 using namespace std;
 
@@ -12,10 +14,10 @@ public:
 	QInt();
 	void ScanQInt();
 	void PrintQInt();
-	bool* DecToBin();
-	QInt BinToDec(bool* bit);
-	char* BinToHex(bool* bit);
-	char* DecToHex();
+	vector<bool> DecToBin(string s);
+	string BinToDec(vector<bool> bit);
+	string BinToHex(vector<bool> bit);
+	string DecToHex(string s);
 	QInt operator+(const QInt& x);
 	QInt operator-(const QInt& x);
 	QInt operator*(const QInt& x);
