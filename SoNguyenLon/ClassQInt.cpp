@@ -72,7 +72,7 @@ string QInt::convertBinToHex(vector<bool> bit)
 string QInt::convertDecToHex(string s)
 {
 
-	/*string ans = "", s1;
+	string ans = "", s1;
 	pair<QInt, QInt> temp;
 	QInt a, b;
 	b.convertDecToQInt("16");
@@ -88,7 +88,7 @@ string QInt::convertDecToHex(string s)
 			s = (char)(s1[1] + 'A' - '0') + s;
 		s = temp.first.convertQIntToDec(); //Thuong
 
-	}*/
+	}
 	return s;
 
 }
