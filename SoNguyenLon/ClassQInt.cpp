@@ -139,7 +139,7 @@ QInt QInt::operator-(QInt x)
 	//a la so bu 2 bang cach lay so bu 1 cong voi 1
 	a = a + b;
 	//- x bay gio tuong duong voi + a vi a la so doi cua x
-	return *this + a;
+	return (*this + a);
 
 }
 
