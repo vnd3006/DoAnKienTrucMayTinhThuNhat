@@ -97,7 +97,7 @@ QInt QInt::operator+(QInt x)
 {
 
 	QInt temp;
-	/*char nho = 0, s;
+	char nho = 0, s;
 	for (int i = 0; i < 128; i++)
 	{
 
@@ -124,7 +124,7 @@ QInt QInt::operator+(QInt x)
 
 		}
 
-	}*/
+	}
 	return temp;
 
 }
