@@ -14,7 +14,6 @@ public:
 	QInt();
 	bool getBit(int i);
 	void setBit(int i, bool bit);
-	QInt reverseBit();
 	void convertDecToQInt(string s);
 	string convertQIntToDec();
 	vector<bool> convertDecToBin(string s);

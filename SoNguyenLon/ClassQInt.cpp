@@ -18,19 +18,9 @@ void QInt::setBit(int i, bool bit)
 {
 
 	if (bit == 0)
-		data[i / 32] = (!(1 << (31 - i))) & data[i / 32];
+		data[i / 32] = (~(1 << (31 - i))) & data[i / 32];
 	else
 		data[i / 32] = (1 << (31 - i)) | data[i / 32];
-
-}
-
-QInt QInt::reverseBit()
-{
-
-	QInt temp;
-	for (int i = 0; i < 128; i++)
-		temp.setBit(i, (this->getBit(i) + 1) % 2);
-	return temp;
 
 }
 
@@ -44,21 +34,21 @@ void QInt::convertDecToQInt(string s)
 string QInt::convertQIntToDec()
 {
 
-
+	return string("");
 
 }
 
 vector<bool> QInt::convertDecToBin(string s)
 {
 
-
+	return vector<bool>();
 
 }
 
 string QInt::convertBinToDec(vector<bool> bit)
 {
 
-
+	return string("");
 
 }
 
@@ -133,7 +123,7 @@ QInt QInt::operator-(QInt x)
 {
 
 	//x dao bit de tao ra so bu 1 la a
-	QInt a = x.reverseBit(), b;
+	QInt a = ~x, b;
 	//b la so 1
 	b.convertDecToQInt("1");
 	//a la so bu 2 bang cach lay so bu 1 cong voi 1
@@ -147,7 +137,7 @@ QInt QInt::operator*(QInt x)
 {
 
 	QInt a, q = *this;
-	bool q1 = 0, q0;
+	/*bool q1 = 0, q0;
 	a.convertDecToQInt("0");
 	for (int i = 0; i < 128; i++)
 	{
@@ -163,7 +153,7 @@ QInt QInt::operator*(QInt x)
 		q.setBit(0, a.getBit(127));
 		a >> 1;
 
-	}
+	}*/
 	return q;
 
 }
@@ -171,7 +161,7 @@ QInt QInt::operator*(QInt x)
 pair<QInt, QInt> QInt::operator/(QInt x)
 {
 
-
+	return pair<QInt, QInt>();
 
 }
 
@@ -202,9 +192,9 @@ QInt QInt::operator>=(QInt x)
 
 QInt QInt::operator=(QInt x)
 {
-	/*for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 		this->data[i] = x.data[i];
-	return *this;*/
+	return *this;
 }
 
 QInt QInt::operator&(QInt x)
@@ -224,7 +214,10 @@ QInt QInt::operator^(QInt x)
 
 QInt QInt::operator~()
 {
-	return QInt();
+	QInt temp;
+	for (int i = 0; i < 128; i++)
+		temp.setBit(i, (this->getBit(i) + 1) % 2);
+	return temp;
 }
 
 QInt QInt::operator<<(int k)
