@@ -174,3 +174,75 @@ pair<QInt, QInt> QInt::operator/(QInt x)
 
 
 }
+
+QInt QInt::operator<(QInt x)
+{
+	return QInt();
+}
+
+QInt QInt::operator>(QInt x)
+{
+	return QInt();
+}
+
+QInt QInt::operator==(QInt x)
+{
+	return QInt();
+}
+
+QInt QInt::operator<=(QInt x)
+{
+	return QInt();
+}
+
+QInt QInt::operator>=(QInt x)
+{
+	return QInt();
+}
+
+QInt QInt::operator=(QInt x)
+{
+	/*for (int i = 0; i < 4; i++)
+		this->data[i] = x.data[i];
+	return *this;*/
+}
+
+QInt QInt::operator&(QInt x)
+{
+	return QInt();
+}
+
+QInt QInt::operator|(QInt x)
+{
+	return QInt();
+}
+
+QInt QInt::operator^(QInt x)
+{
+	return QInt();
+}
+
+QInt QInt::operator~()
+{
+	return QInt();
+}
+
+QInt QInt::operator<<(QInt x)
+{
+	return QInt();
+}
+
+QInt QInt::operator>>(QInt x)
+{
+	return QInt();
+}
+
+QInt QInt::rol()
+{
+	return QInt();
+}
+
+QInt QInt::ror()
+{
+	return QInt();
+}
