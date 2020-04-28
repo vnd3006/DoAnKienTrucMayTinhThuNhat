@@ -146,7 +146,25 @@ QInt QInt::operator-(QInt x)
 QInt QInt::operator*(QInt x)
 {
 
-	return QInt();
+	QInt a, q = *this;
+	bool q1 = 0, q0;
+	a.convertDecToQInt("0");
+	for (int i = 0; i < 128; i++)
+	{
+
+		q0 = q.getBit(127);
+		if (q0 == 1 && q1 == 0)
+			a = a - x;
+		else if (q0 == 0 && q1 == 1)
+			a = a + x;
+		//Dich phai [A, Q, Q1] 1 don vi
+		q1 = q0;
+		q >> 1;
+		q.setBit(0, a.getBit(127));
+		a >> 1;
+
+	}
+	return q;
 
 }
 
