@@ -36,8 +36,8 @@ public:
 	QInt operator|(QInt x);
 	QInt operator^(QInt x);
 	QInt operator~();
-	QInt operator<<(QInt x);
-	QInt operator>>(QInt x);
+	QInt operator<<(int k);
+	QInt operator>>(int k);
 	QInt rol();
 	QInt ror();
 

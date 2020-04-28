@@ -209,12 +209,12 @@ QInt QInt::operator~()
 	return QInt();
 }
 
-QInt QInt::operator<<(QInt x)
+QInt QInt::operator<<(int k)
 {
 	return QInt();
 }
 
-QInt QInt::operator>>(QInt x)
+QInt QInt::operator>>(int k)
 {
 	return QInt();
 }
