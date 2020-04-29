@@ -1,10 +1,118 @@
 #include "Qfloat.h"
 
+string reverse(string s) {
+	string result;
+	for (int i = s.length() - 1; i >= 0; i--) {
+		result += s[i];
+	}
+	return result;
+}
+string nhan2(string so) {
+	int temp = 0;
+	string s;
+	for (int i = so.length() - 1; i >= 0; i--) {
+		if (so[i] != '.') {
+			int num = so[i] - '0';
+			s += (num * 2 + temp) % 10 + '0';
+			temp = (temp + num * 2);
+			if (temp >= 10) {
+				temp = temp / 10;
+			}
+			else {
+				temp = 0;
+			}
+		}
+		else {
+			s += '.';
+		}
+	}
+	if (temp > 0) {
+		s += (temp + '0');
+	}
+	s = reverse(s);
+
+	//Kiem tra phai so thap phan khong
+	int check = s.find('.');
+	if (check > 0) {
+		//Xoa so 0
+		int index = -1;
+		for (int i = s.length() - 1; i >= 0; i--) {
+			if (s[i] != '0') {
+				index = i;
+				break;
+			}
+		}
+		if (index != -1)
+		{
+			if (s[index] == '.')
+				s = s.substr(0, index);
+			else
+				s = s.substr(0, index + 1);
+		}
+	}
+	return s;
+}
+string chia2(string nguyen) {
+	string s;
+	int temp = 0;
+	for (int i = 0; i < nguyen.length(); i++) {
+		int num = nguyen[i] - '0';
+		temp = num + temp * 10;
+		if (temp >= 2) {
+			s += temp / 2 + '0';
+			temp = temp - temp / 2 * 2;
+		}
+		else if (temp < 2 && i == nguyen.length() - 1)
+			return "0";
+	}
+	return s;
+}
+string chia2_thapphan(string so) {
+	string s;
+	int temp = 0;
+	bool check = false;
+	for (int i = 0; i < so.length(); i++) {
+		if (so[i] != '.')
+		{
+			int num = so[i] - '0';
+			temp = num + temp * 10;
+			if (temp >= 2) {
+				s += temp / 2 + '0';
+				temp = temp - temp / 2 * 2;
+			}
+			else
+			{
+				if (i < so.length()) {
+					s += '0';
+				}
+			}
+		}
+		else
+		{
+			check = true;
+			if (s.length() == 0) {
+				s = "0.";
+			}
+			else
+				s += '.';
+		}
+	}
+	if (temp > 0) {
+		if (check) {
+			s += '5';
+		}
+		else
+			s += ".5";
+	}
+	return s;
+}
+Qfloat::Qfloat() {
+	data[0] = data[1] = data[2] = data[3] = data[4] = 0;
+}
 bool Qfloat::getBit(int index)
 {
 	return (data[index / 32] >> (31 - index % 32)) & 1;
 }
-
 void Qfloat::setBit(int index, bool bit)
 {
 	if (bit == 0)
@@ -13,87 +121,7 @@ void Qfloat::setBit(int index, bool bit)
 		data[index / 32] = (1 << (31 - index)) | data[index / 32];
 
 }
-string reverse(string s) {
-	string result;
-	for (int i = s.length() - 1; i >= 0; i--) {
-		result += s[i];
-	}
-	return result;
-}
-
-string Nhan2(string thapphan) {
-	int temp = 0;
-	string s;
-	for (int i = thapphan.length() - 1; i > 1; i--) {
-		int num = thapphan[i] - '0';
-		s += (num * 2 + temp) % 10 + '0';
-		temp = (temp + num * 2);
-		if (temp >= 10) {
-			temp = temp / 10;
-		}
-		else {
-			temp = 0;
-		}
-	}
-	if (temp > 0) {
-		s += temp + '0';
-	}
-	s = reverse(s);
-	int lui = thapphan.length() - 2;
-	if (lui < s.length()) {
-		string _s = s.substr(0, s.length() - lui) + '.' + s.substr(s.length() - lui);
-		s = _s;
-	}
-	else if (lui == s.length()) {
-		string _s = "0." + s;
-		s = _s;
-	}
-	else {
-		int so0 = lui - s.length();
-		string _s = "0.";
-		for (int i = 1; i <= so0; i++) {
-			_s += '0';
-		}
-		_s += s;
-		s = _s;
-	}
-	//Xoa so 0
-	int index = -1;
-	for (int i = s.length() - 1; i >= 0; i--) {
-		if (s[i] != '0') {
-			index = i;
-			break;
-		}
-	}
-	if (index != -1)
-	{
-		if (s[index] == '.')
-			s = s.substr(0, index);
-		else
-			s = s.substr(0, index + 1);
-	}
-	return s;
-}
-string Chia2(string nguyen) {
-	if (nguyen == "0")
-		return "0";
-	else {
-		vector<int> s;
-		int temp = 0;
-		for (int i = 0; i < nguyen.length(); i++) {
-			int num = nguyen[i] - '0';
-			temp = num % 2 + temp * 10;
-			if (temp % 2 == 0) {
-				temp = 0;
-				s.push_back(0);
-			}
-			else {
-				s.push_back(1);
-			}
-		}
-	}
-}
-void Qfloat::ScanQfloat(Qfloat& x)
+void Qfloat::ScanQfloat()
 {
 	string num;
 	cin >> num;
@@ -111,13 +139,13 @@ void Qfloat::ScanQfloat(Qfloat& x)
 		else {
 			np_nguyen = '1' + np_nguyen;
 		}
-		nguyen = Chia2(nguyen);
+		nguyen = chia2(nguyen);
 	}
 
 	string np_tp = "";
 	string thapphan = "0" + num.substr(index);
 	while (1) {
-		thapphan = Nhan2(thapphan);
+		thapphan = nhan2(thapphan);
 		if (thapphan[0] < '1') {
 			np_tp += '0';
 		}
@@ -156,14 +184,37 @@ void Qfloat::ScanQfloat(Qfloat& x)
 		else {
 			e = '1' + e;
 		}
-		_e = Chia2(_e);
+		_e = chia2(_e);
 	}
+	if (e.length() < 15) {
+		int n = e.length();
+		for (int i = 0; i < 15 - n; i++) {
+			e = '0' + e;
+		}
+	}
+	//
+
 	for (int i = 1; i < np.length(); i++) {
 		if (np[i] != '.')
 			m += np[i];
 	}
-	//
-	cout << s + " " + e + " " + m;
+	if (m.length() < 112) {
+		int n = m.length();
+		for (int i = 0; i < 112 - n; i++) {
+			m += '0';
+		}
+	}
+
+	//Dua bit vao data
+	string result = s + e + m;
+	for (int i = 0; i < 128; i++) {
+		if (result[0] - '0' == 0) {
+			setBit(i, 0);
+		}
+		else {
+			setBit(i, 1);
+		}
+	}
 }
 
 void Qfloat::PrintQfloat(Qfloat x)
