@@ -40,5 +40,7 @@ public:
 	QInt rol();
 	QInt ror();
 
+	void ScanQInt();
+	void PrintQInt();
 };
 
