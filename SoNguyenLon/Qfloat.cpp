@@ -55,6 +55,8 @@ string nhan2(string so) {
 string chia2(string nguyen) {
 	string s;
 	int temp = 0;
+	if ((nguyen[0] == '1' || nguyen[0] == '0') && nguyen.length() == 1)
+		return "0";
 	for (int i = 0; i < nguyen.length(); i++) {
 		int num = nguyen[i] - '0';
 		temp = num + temp * 10;
@@ -62,8 +64,8 @@ string chia2(string nguyen) {
 			s += temp / 2 + '0';
 			temp = temp - temp / 2 * 2;
 		}
-		else if (temp < 2 && i == nguyen.length() - 1)
-			return "0";
+		else if (i == nguyen.length() - 1)
+			s += '0';
 	}
 	return s;
 }
@@ -125,12 +127,32 @@ void Qfloat::ScanQfloat()
 {
 	string num;
 	cin >> num;
-	int index = num.find('.');
-	if (index < 0)
-	{
-		num += ".0";
+	//Dua bit vao data
+	string result = DecToBin(num);
+	for (int i = 0; i < 128; i++) {
+		if (result[0] - '0' == 0) {
+			setBit(i, 0);
+		}
+		else {
+			setBit(i, 1);
+		}
 	}
-	index = num.find('.');
+}
+
+void Qfloat::PrintQfloat(Qfloat x)
+{
+}
+
+Qfloat Qfloat::BinToDec(int* data)
+{
+	
+}
+
+string Qfloat::DecToBin(string num)
+{
+	//Chuyen phan nguyen qua nhi phan
+	//Vi tri dau "." trong chuoi num
+	int index = num.find('.');
 	string nguyen;
 	if (num[0] == '-')
 		nguyen = num.substr(1, index - 1);
@@ -146,10 +168,12 @@ void Qfloat::ScanQfloat()
 		}
 		nguyen = chia2(nguyen);
 	}
-
+	if (np_nguyen.length() == 0)
+		np_nguyen += '0';
+	//Chuyen phan thap phan qua nhi phan
 	string np_tp = "";
 	string thapphan = "0" + num.substr(index);
-	while (thapphan != "0") {
+	while (1) {
 		thapphan = nhan2(thapphan);
 		if (thapphan[0] < '1') {
 			np_tp += '0';
@@ -162,26 +186,43 @@ void Qfloat::ScanQfloat()
 			thapphan[0] = '0';
 		}
 	}
+
+	//Luu vo bien np
 	string np = np_nguyen + "." + np_tp;
 	cout << np << endl;
-	//vi tri dau "."
-	int index1 = np.find('.');
 	//
 	string s = "";
 	string e = "";
 	string m = "";
-	if (num[0] == '-')
+	if (num[0] == '	-')
 		s += '1';
 	else
 		s += '0';
+
+	//vi tri dau "." trong chuoi nhi phan
+	int index1 = np.find('.');
 	//Chuyen e ra nhi phan
 	string _e = "";
-	int i = index1 - 1 + 127;
-	
-	while (i != 0) {
-		char x = i % 10 + '0';
+	int somu;
+	if (index1 == 1)
+	{
+		for (int j = 2; j < np.length(); j++) {
+			if (np[j] == '1') {
+				somu = index1 - j + 127;//16383;
+				break;
+			}
+		}
+	}
+	else {
+		somu = index1 - 1 + 127;// 16383;
+	}
+	//Dung bien temp de tinh phan tri
+	int temp = somu - 127;
+	//Chuyen so mu qua nhi phan roi dua vao chuoi e
+	while (somu != 0) {
+		char x = somu % 10 + '0';
 		_e = x + _e;
-		i = i / 10;
+		somu = somu / 10;
 	}
 	while (_e != "0") {
 		if ((_e[_e.length() - 1] - '0') % 2 == 0) {
@@ -192,48 +233,28 @@ void Qfloat::ScanQfloat()
 		}
 		_e = chia2(_e);
 	}
+	//Chua du 15 bit thi them 0 vao de du 15 bit
 	if (e.length() < 15) {
 		int n = e.length();
 		for (int i = 0; i < 15 - n; i++) {
 			e = '0' + e;
 		}
 	}
-	//
 
-	for (int i = 1; i < np.length(); i++) {
+	//Luu phan tri m
+	int temp2 = index1 - temp;
+	if (temp < 0)
+		temp2++;
+	for (int i = temp2; i < np.length(); i++) {
 		if (np[i] != '.')
 			m += np[i];
 	}
+	//Neu khong du 112 bit thi them '0' vao cho du 
 	if (m.length() < 112) {
 		int n = m.length();
 		for (int i = 0; i < 112 - n; i++) {
 			m += '0';
 		}
 	}
-
-	//Dua bit vao data
-	string result = s + e + m;
-	for (int i = 0; i < 128; i++) {
-		if (result[0] - '0' == 0) {
-			setBit(i, 0);
-		}
-		else {
-			setBit(i, 1);
-		}
-	}
+	return s + " " + e + " " + m;
 }
-
-void Qfloat::PrintQfloat(Qfloat x)
-{
-}
-
-//Qfloat Qfloat::BinToDec(int* data)
-//{
-//	
-//
-//}
-
-//string Qfloat::DecToBin(Qfloat x)
-//{
-//	
-//}

@@ -12,6 +12,6 @@ class Qfloat
 	void ScanQfloat();
 	void PrintQfloat(Qfloat );
 	Qfloat BinToDec(int*);
-	string DecToBin(Qfloat);	 
+	string DecToBin(string);	 
 };
 
