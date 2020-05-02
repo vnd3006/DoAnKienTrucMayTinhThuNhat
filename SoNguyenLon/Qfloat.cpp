@@ -172,6 +172,7 @@ void Qfloat::ScanQfloat()
 	//Chuyen e ra nhi phan
 	string _e = "";
 	int i = index1 - 1 + 127;
+	
 	while (i != 0) {
 		char x = i % 10 + '0';
 		_e = x + _e;
