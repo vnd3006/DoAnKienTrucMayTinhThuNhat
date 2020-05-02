@@ -126,6 +126,11 @@ void Qfloat::ScanQfloat()
 	string num;
 	cin >> num;
 	int index = num.find('.');
+	if (index < 0)
+	{
+		num += ".0";
+	}
+	index = num.find('.');
 	string nguyen;
 	if (num[0] == '-')
 		nguyen = num.substr(1, index - 1);
@@ -144,7 +149,7 @@ void Qfloat::ScanQfloat()
 
 	string np_tp = "";
 	string thapphan = "0" + num.substr(index);
-	while (1) {
+	while (thapphan != "0") {
 		thapphan = nhan2(thapphan);
 		if (thapphan[0] < '1') {
 			np_tp += '0';
@@ -222,12 +227,13 @@ void Qfloat::PrintQfloat(Qfloat x)
 {
 }
 
-Qfloat Qfloat::BinToDec(int* data)
-{
-	
-}
+//Qfloat Qfloat::BinToDec(int* data)
+//{
+//	
+//
+//}
 
-string Qfloat::DecToBin(Qfloat x)
-{
-	
-}
+//string Qfloat::DecToBin(Qfloat x)
+//{
+//	
+//}
