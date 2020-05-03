@@ -1,5 +1,5 @@
 #include "ClassQInt.h"
-
+#include "Qfloat.h"
 int main()
 {
 
