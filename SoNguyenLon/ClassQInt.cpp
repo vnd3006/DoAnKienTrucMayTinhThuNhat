@@ -1,9 +1,58 @@
 ﻿#include "ClassQInt.h"
+#include "XuLySoLon.h"
 
 QInt::QInt()
 {
 
 	data[0] = data[1] = data[2] = data[3] = 0;
+
+}
+
+QInt::QInt(string s)
+{
+	string temp = s;
+	bool dau = 0;
+	bool ok = 0;
+	if (temp[0] == '-')
+	{
+		dau = 1;
+		temp.erase(temp.begin());
+	}
+	int cuoi = temp[temp.size() - 1] - '0';
+	int dem = 0;
+	setBit(dem, cuoi % 2);
+	if (dau == 1 && cuoi % 2 == 1)
+	{
+		ok = 1;
+	}
+
+	dem++;
+	while (temp != "1")
+	{
+		Chia(temp, "2", temp);
+		cuoi = temp[temp.size() - 1] - '0';
+		if (ok == 1)
+			setBit(dem, (cuoi + 1) % 2);
+		else
+			setBit(dem, (cuoi) % 2);
+		if (dau == 1 && cuoi % 2 == 1)
+			ok = 1;
+		dem++;
+	}
+
+	while (dem < 128)
+	{
+		if (dau == 1 && ok == 1)
+		{
+			setBit(dem, 1);
+		}
+		else
+		{
+			setBit(dem, 0);
+		}
+
+		dem++;
+	}
 
 }
 
@@ -26,6 +75,8 @@ void ChuanHoa(string &a, string &b)
 // Bỏ các số 0 ở đầu
 void ChuanHoaSo0(string &a)
 {
+	if (a.length() == 1)
+		return;
 	int i = 0;
 	if (a[i] == '0')
 	{
@@ -69,7 +120,6 @@ void Tru(string sotru, string sobitru, string &ketqua)
 	}
 
 	int sodu = 0;
-	int temp;
 	for (int i = length - 1; i >= 0; i--)
 	{
 		if (sotru[i] < sobitru[i] + sodu)
@@ -157,62 +207,11 @@ void QInt::setBit(int i, bool bit)
 
 }
 
-void QInt::convertDecToQInt(string s)
-{
-	string temp = s;
-	bool dau = 0;
-	bool ok = 0;
-	if (temp[0] == '-')
-	{
-		dau = 1;
-		temp.erase(temp.begin());
-	}
-	int cuoi = temp[temp.size() - 1] - '0';
-	int dem = 0;
-	setBit(dem, cuoi % 2);
-	if (dau == 1 && cuoi % 2 == 1)
-	{
-		ok = 1;
-	}
-
-	dem++;
-	while (temp != "1")
-	{
-		Chia(temp, 2, temp);
-		cuoi = temp[temp.size() - 1] - '0';
-		if (ok == 1)
-			setBit(dem, (cuoi + 1) % 2);
-		else
-			setBit(dem, (cuoi) % 2);
-		if (dau == 1 && cuoi % 2 == 1)
-			ok = 1;
-		dem++;
-	}
-
-	while (dem < 128)
-	{
-		if (dau == 1 && ok == 1)
-		{
-			setBit(dem, 1);
-		}
-		else
-		{
-			setBit(dem, 0);
-		}
-
-		dem++;
-	}
-
-
-
-}
-
 string QInt::convertQIntToDec()
 {
 
 	string ketqua = "0";
 	vector<int> c;
-	int dem;
 
 
 	for (int i = 0; i < 127; i++)
@@ -244,10 +243,14 @@ string QInt::convertQIntToDec()
 
 }
 
-vector<bool> QInt::convertDecToBin(string s)
+vector<bool> QInt::convertDecToBin()
 {
 
 	vector<bool> rs;
+	for (int i = 127; i >= 0; i--)
+		rs.push_back(this->getBit(i));
+	return rs;
+	/*vector<bool> rs;
 	string temp = s;
 	bool dau = 0;
 	bool ok = 0;
@@ -292,7 +295,7 @@ vector<bool> QInt::convertDecToBin(string s)
 		dem++;
 	}
 	reverse(rs.begin(), rs.end());
-	return rs;
+	return rs;*/
 
 }
 
@@ -301,13 +304,12 @@ string QInt::convertBinToDec(vector<bool> vbit)
 
 	string ketqua = "0";
 	vector<int> c;
-	int dem;
 	reverse(vbit.begin(), vbit.end());
-	while (vbit.size() < 127)
+	while (vbit.size() < 128)
 	{
 		vbit.push_back(0);
 	}
-	for (int i = 0; i < 127; i++)
+	for (int i = 0; i < 128; i++)
 	{
 		bool bit = vbit[i];
 		string b;
@@ -330,8 +332,6 @@ string QInt::convertBinToDec(vector<bool> vbit)
 		Nhan(b, bit, b);
 		Cong(ketqua, b, ketqua);
 	}
-
-
 	return ketqua;
 
 }
@@ -339,31 +339,30 @@ string QInt::convertBinToDec(vector<bool> vbit)
 string QInt::convertBinToHex(vector<bool> bit)
 {
 
-	return convertDecToHex(convertBinToDec(bit));
+	QInt a(QInt::convertBinToDec(bit));
+	return a.convertDecToHex();
 
 }
 
-string QInt::convertDecToHex(string s)
+string QInt::convertDecToHex()
 {
 
-	/*string ans = "", s1;
+	string ans = "", s1;
 	pair<QInt, QInt> temp;
-	QInt a, b;
-	b.convertDecToQInt("16");
-	while (s != "0")
+	QInt a = *this, b("16");
+	while (a.data[0] != 0 && a.data[1] != 0 && a.data[2] != 0 && a.data[3] != 0)
 	{
 
-		a.convertDecToQInt(s);
 		temp = a / b;
 		s1 = temp.second.convertQIntToDec(); //So du
 		if (s1.length() == 1) //So du tu 0 den 9 (tuong ung tu 0 den 9 trong he hex)
-			s = s1 + s;
+			ans = s1 + ans;
 		else //So du tu 10 den 15 (tuong ung tu A den F trong he hex)
-			s = (char)(s1[1] + 'A' - '0') + s;
-		s = temp.first.convertQIntToDec(); //Thuong
+			ans = (char)(s1[1] + 'A' - '0') + ans;
+		a = temp.first; //Thuong
 
-	}*/
-	return s;
+	}
+	return ans;
 
 }
 
@@ -371,7 +370,7 @@ QInt QInt::operator+(QInt x)
 {
 
 	QInt temp;
-	/*char nho = 0, s;
+	char nho = 0, s;
 	for (int i = 0; i < 128; i++)
 	{
 
@@ -393,51 +392,51 @@ QInt QInt::operator+(QInt x)
 		else
 		{
 
-			temp.setBit(i, nho);
+			temp.setBit(i, s);
 			nho = 0;
 
 		}
 
-	}*/
+	}
 	return temp;
 
+}
+
+QInt QInt::oppositeNumber()
+{
+	QInt a("1");
+	//So doi la so bu 2 (lay so bu 1 cong voi 1)
+	return ~*this + a;
 }
 
 QInt QInt::operator-(QInt x)
 {
 
-	//x dao bit de tao ra so bu 1 la a
-	QInt a = ~x, b;
-	//b la so 1
-	b.convertDecToQInt("1");
-	//a la so bu 2 bang cach lay so bu 1 cong voi 1
-	a = a + b;
-	//- x bay gio tuong duong voi + a vi a la so doi cua x
-	return *this + a;
+	//Tru x tuong duong voi cong so doi cua x
+	return *this + x.oppositeNumber();
 
 }
 
 QInt QInt::operator*(QInt x)
 {
 
-	QInt a, q = *this;
-	/*bool q1 = 0, q0;
-	a.convertDecToQInt("0");
+	QInt a("0"), q = *this;
+	bool q1 = 0, q0;
 	for (int i = 0; i < 128; i++)
 	{
 
-		q0 = q.getBit(127);
+		q0 = q.getBit(0);
 		if (q0 == 1 && q1 == 0)
 			a = a - x;
 		else if (q0 == 0 && q1 == 1)
 			a = a + x;
 		//Dich phai [A, Q, Q1] 1 don vi
 		q1 = q0;
-		q >> 1;
-		q.setBit(0, a.getBit(127));
-		a >> 1;
+		q << 1;
+		q.setBit(127, a.getBit(0));
+		a << 1;
 
-	}*/
+	}
 	return q;
 
 }
@@ -445,7 +444,49 @@ QInt QInt::operator*(QInt x)
 pair<QInt, QInt> QInt::operator/(QInt x)
 {
 
-	return pair<QInt, QInt>();
+	QInt a, b, q = *this;
+	//Neu So bi chia Q > 0 thi A = 128 bit 0
+	//Nguoc lai neu Q < 0 thi A = 128 bit 1
+	if (q.getBit(127) == 1)
+		for (int i = 0; i < 128; i++)
+			a.setBit(i, 1);
+	vector<bool> boo;
+	for (int i = 0; i < 128; i++)
+	{
+
+		//Dich trai [A, Q] 1 bit
+		a >> 1;
+		a.setBit(0, q.getBit(127));
+		q >> 1;
+		//Gan B = A
+		b = a;
+		//Voi X la so chia
+		//Neu A, X trai dau ==> A = A + X 
+		//Nguoc lai A, X cung dau ==> A = A - X
+		if (a.getBit(127) != x.getBit(127))
+			a = a + x;
+		else
+			a = a - x;
+		//Neu A, B cung dau ==> Q0 = 1
+		//Nguoc lai A, B trai dau ==> Q0 = 0, A = B
+		if (a.getBit(127) == b.getBit(127))
+			q.setBit(0, 1);
+		else
+		{
+
+			q.setBit(0, 0);
+			a = b;
+
+		}
+
+	}
+	//A la so du
+	//Q la thuong neu Q va X cung dau
+	//Nguoc lai Q la bu 2 cua thuong neu Q va X trai dau
+	if (this->getBit(127) == x.getBit(127))
+		return pair<QInt, QInt>(q, a);
+	else
+		return pair<QInt, QInt>(q.oppositeNumber(), a);
 
 }
 
@@ -506,12 +547,22 @@ QInt QInt::operator~()
 
 QInt QInt::operator<<(int k)
 {
-	return QInt();
+
+	for (int i = 0; i < 127; i++)
+		this->setBit(i, this->getBit(i + 1));
+	this->setBit(127, 0);
+	return *this;
+
 }
 
 QInt QInt::operator>>(int k)
 {
-	return QInt();
+
+	for (int i = 127; i > 0; i--)
+		this->setBit(i, this->getBit(i - 1));
+	this->setBit(0, 0);
+	return *this;
+
 }
 
 QInt QInt::rol()
@@ -523,240 +574,6 @@ QInt QInt::ror()
 {
 	return QInt();
 }
-
-// Các thao tác với số nguyên lớn( ví dụ nhân chia thì cả 2 cùng lớn)
-//int SoSanh(vector<int> a, vector<int> b)
-//{
-//	if (a.size() > b.size())
-//		return -1;
-//	if (a.size() < b.size())
-//		return 1;
-//	for (int i = a.size() - 1; i >= 0; i--)
-//	{
-//		if (a[i] > b[i])
-//			return -1;
-//		if (a[i] < b[i])
-//			return 1;
-//	}
-//	return 0;
-//}
-//
-//void LoaiBoSo0(vector<int> &x)
-//{
-//	while (x[x.size() - 1] == 0 && x.size() > 1)
-//	{
-//		x.pop_back();
-//	}
-//}
-//
-//void Cong(string a, string b, string &c)
-//{
-//	vector<int> x, y, z;
-//	z.clear();
-//	for (int i = a.size() - 1; i >= 0; i--)
-//	{
-//		x.push_back(a[i] - '0');
-//	}
-//	// Xóa đi các số 0 
-//	LoaiBoSo0(x);
-//	// Tương tự 
-//	for (int i = b.size() - 1; i >= 0; i--)
-//	{
-//		y.push_back(b[i] - '0');
-//	}
-//
-//	LoaiBoSo0(y);
-//	
-//	int length = x.size() > y.size() ? x.size() : y.size();
-//	x.resize(length);
-//	y.resize(length);
-//	int sodu = 0;
-//	int temp;
-//	for (int i = 0; i < length; i++)
-//	{
-//		temp = x[i] + y[i] + sodu;
-//		z.push_back(temp % 10);
-//		sodu = temp / 10;
-//	}
-//	if (sodu > 0)
-//	{
-//		z.push_back(temp / 10);
-//	}
-//	c = "";
-//	for (int i = z.size() - 1; i >= 0; i--)
-//	{
-//		c += (z[i] + '0');
-//	}
-//}
-//
-//void Tru(vector<int> sotru, vector<int> sobitru, vector<int> &ketqua)
-//{
-//	ketqua.clear();
-//	int length = sotru.size();
-//	sobitru.resize(length);
-//
-//	int sodu = 0;
-//	int temp;
-//	for (int i = 0; i < length; i++)
-//	{
-//		if (sotru[i] < sobitru[i] + sodu)
-//		{
-//			ketqua.push_back(sotru[i] - sobitru[i] - sodu + 10);
-//			sodu = 1;
-//		}
-//		else
-//		{
-//			ketqua.push_back(sotru[i] - sobitru[i] - sodu);
-//			sodu = 0;
-//		}
-//	}
-//	LoaiBoSo0(ketqua);
-//}
-//
-//void Nhan(string a, string b, string &c)
-//{
-//	vector<int> x, y, z;
-//	z.clear();
-//	for (int i = a.size() - 1; i >= 0; i--)
-//	{
-//		x.push_back(a[i] - '0');
-//	}
-//	// Xóa đi các số 0 
-//	LoaiBoSo0(x);
-//	// Tương tự 
-//	for (int i = b.size() - 1; i >= 0; i--)
-//	{
-//		y.push_back(b[i] - '0');
-//	}
-//
-//	LoaiBoSo0(y);
-//
-//	for (int i = 0; i < x.size(); i++)
-//	{
-//		vector<int> temp;
-//		int sodu = 0, temp1;
-//		for (int j = 0; j < y.size(); j++)
-//		{
-//			temp1 = x[i] * y[j] + sodu;
-//			temp.push_back(temp1 % 10);
-//			sodu = temp1 / 10;
-//		}
-//
-//		if (sodu > 0)
-//		{
-//			temp.push_back(sodu);
-//		}
-//		for (int j = 0; j < i; j++)
-//		{
-//			temp.insert(temp.begin(), 0);
-//		} 
-//		/*for (int j = z.size() - 1; j >= 0; j--)
-//		{
-//			c = "";
-//			c += (z[j] + '0');
-//		}*/
-//		string temp2 = "";
-//		for (int j = temp.size() - 1; j >= 0; j--)
-//		{
-//			temp2 += (temp[j] + '0');
-//		}
-//		Cong(c, temp2, c);
-//	}
-//
-//}
-//
-//void Chia(string sochia, string sobichia, string &ketqua)
-//{
-//	// Lưu string vào vector
-//	vector<int> x, y, z;
-//	z.clear();
-//	for (int i = sochia.size() - 1; i >= 0; i--)
-//	{
-//		x.push_back(sochia[i] - '0');
-//	}
-//	// Xóa đi các số 0 ở đầu
-//	LoaiBoSo0(x);
-//	// Tương tự cho số bị chia
-//	for (int i = sobichia.size() - 1; i >= 0; i--)
-//	{
-//		y.push_back(sobichia[i] - '0');
-//	}
-//	LoaiBoSo0(y);
-//
-//	vector<int> temp;
-//	while (x.size() > 0)
-//	{
-//		int ketthuc = x.size() - 1;
-//		int batdau = ketthuc - y.size() + 1;
-//		if (batdau < 0)
-//			batdau = 0;
-//		int dem = batdau;
-//
-//		if (temp.size() == 0)
-//			while (dem <= ketthuc)
-//			{
-//				//temp.push_back(x[batdau]);
-//				temp.insert(temp.begin(), char(x.back()));
-//				x.pop_back();
-//				dem++;
-//			}
-//		else
-//			while (dem <= ketthuc)
-//			{
-//				//temp.insert(temp.begin(), x[batdau]);
-//				temp.insert(temp.begin(), char(x.back()));
-//				x.pop_back();
-//				dem++;
-//			}
-//		if (SoSanh(temp, y) != -1 && x.size() > 0)
-//		{
-//			temp.insert(temp.begin(), x[batdau - 1]);
-//			x.pop_back();
-//		}
-//		LoaiBoSo0(temp);
-//		dem = 0;
-//		while (SoSanh(temp, y) != 1)
-//		{
-//			dem++;
-//			Tru(temp, y, temp);
-//		}
-//		if (dem >= 10)
-//		{
-//			int temp1 = dem % 10;
-//			dem /= 10;
-//			int temp2 = dem % 10;
-//			dem /= 10;
-//			z.insert(z.begin(), temp2);
-//			z.insert(z.begin(), temp1);
-//		}
-//		else
-//		{
-//			z.insert(z.begin(), dem);
-//		}
-//	}
-//	ketqua = "";
-//	for (int i = z.size() - 1; i >= 0; i--)
-//	{
-//		ketqua += (z[i] + '0');
-//	}
-//}
-//
-//void LuyThuaCua2(int somu, string &ketqua)
-//{
-//	ketqua = "2";
-//	for (int i = 0; i < somu - 1; i++)
-//	{
-//		Nhan(ketqua, "2", ketqua);
-//	}
-//	if (somu == 0)
-//		ketqua = "1";
-//	
-//}
-
-
-
-
-
 
 void QInt::ScanQInt()
 {
@@ -811,16 +628,11 @@ void QInt::ScanQInt()
 
 }
 
-
-
 void QInt::PrintQInt()
 {
 
 	string ketqua = "0";
 	vector<int> c;
-	int dem;
-
-
 	for (int i = 0; i < 127; i++)
 	{
 		bool bit = getBit(i);
@@ -846,5 +658,5 @@ void QInt::PrintQInt()
 	}
 
 
-	cout << ketqua;
+	cout << ketqua << endl;
 }

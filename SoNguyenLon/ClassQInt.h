@@ -1,9 +1,6 @@
 #pragma once
+#include "XuLySoLon.h"
 #include <iostream>
-#include <vector>
-#include <string>
-
-using namespace std;
 
 class QInt
 {
@@ -12,15 +9,16 @@ private:
 	int data[4];
 public:
 	QInt();
+	QInt(string s);
 	bool getBit(int i);
 	void setBit(int i, bool bit);
-	void convertDecToQInt(string s);
 	string convertQIntToDec();
-	vector<bool> convertDecToBin(string s);
-	string convertBinToDec(vector<bool> bit);
-	string convertBinToHex(vector<bool> bit);
-	string convertDecToHex(string s);
+	vector<bool> convertDecToBin();
+	static string convertBinToDec(vector<bool> bit);
+	static string convertBinToHex(vector<bool> bit);
+	string convertDecToHex();
 	QInt operator+(QInt x);
+	QInt oppositeNumber();
 	QInt operator-(QInt x);
 	QInt operator*(QInt x);
 	//Cap gia tri QInt tra ve trong phep chia la cap thuong va so du
