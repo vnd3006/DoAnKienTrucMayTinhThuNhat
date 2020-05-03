@@ -3,13 +3,13 @@
 int main()
 {
 
-	/*QInt a, b;
-	pair<QInt, QInt> c;
+	/*QInt a, b, c;
 	a.ScanQInt();
 	b.ScanQInt();
-	c = a / b;
-	c.first.PrintQInt();
-	c.second.PrintQInt();*/
+	a.PrintQInt();
+	b.PrintQInt();
+	c = a * b;
+	c.PrintQInt();*/
 	return 0;
 
 }

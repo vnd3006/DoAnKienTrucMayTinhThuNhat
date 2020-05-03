@@ -10,6 +10,7 @@ QInt::QInt()
 
 QInt::QInt(string s)
 {
+	
 	string temp = s;
 	bool dau = 0;
 	bool ok = 0;
@@ -26,6 +27,17 @@ QInt::QInt(string s)
 		ok = 1;
 	}
 
+	//Xoa so 0 du thua o dau chuoi
+	while (temp.length() > 1 && temp[0] == '0')
+		temp.erase(temp.begin());
+	//Kiem tra chuoi nhap vao co phai la so 0 hay khong
+	if (temp[0] == '0')
+	{
+
+		data[0] = data[1] = data[2] = data[3] = 0;
+		return;
+
+	}
 	dem++;
 	while (temp != "1")
 	{
@@ -420,14 +432,22 @@ QInt QInt::operator-(QInt x)
 QInt QInt::operator*(QInt x)
 {
 
+	//Q la so bi chia
+	//X la so chia
+	//A ban dau khoi tao gom 128 bit 0
 	QInt a("0"), q = *this;
+	//Q1 duoc hieu nhu la bit -1 cua Q
+	//Q0 chinh la bit 0 cua Q
 	bool q1 = 0, q0;
 	for (int i = 0; i < 128; i++)
 	{
 
+		//Lay bit 0 cua Q dua vao Q0
 		q0 = q.getBit(0);
+		//Neu Q0 Q-1 la 10 thi A = A - X
 		if (q0 == 1 && q1 == 0)
 			a = a - x;
+		//Neu Q0 Q-1 la 01 thi A = A + X
 		else if (q0 == 0 && q1 == 1)
 			a = a + x;
 		//Dich phai [A, Q, Q1] 1 don vi
@@ -577,54 +597,11 @@ QInt QInt::ror()
 
 void QInt::ScanQInt()
 {
+	
 	string qint;
 	getline(cin, qint);
-	string temp = qint;
-	bool dau = 0;
-	bool ok = 0;
-	if (temp[0] == '-')
-	{
-		dau = 1;
-		temp.erase(temp.begin());
-	}
-	int cuoi = temp[temp.size() - 1] - '0';
-	int dem = 0;
-	setBit(dem, cuoi % 2);
-	if (dau == 1 && cuoi % 2 == 1)
-	{
-		ok = 1;
-	}
-
-	dem++;
-	while (temp != "1")
-	{
-		Chia(temp, 2, temp);
-		cuoi = temp[temp.size() - 1] - '0';
-		if (ok == 1)
-			setBit(dem, (cuoi + 1) % 2);
-		else
-			setBit(dem, (cuoi) % 2);
-		if (dau == 1 && cuoi % 2 == 1)
-			ok = 1;
-		dem++;
-	}
-
-	while (dem < 128)
-	{
-		if (dau == 1 && ok == 1)
-		{
-			setBit(dem, 1);
-		}
-		else
-		{
-			setBit(dem, 0);
-		}
-
-		dem++;
-	}
-
-
-
+	QInt a(qint);
+	*this = a;
 
 }
 
