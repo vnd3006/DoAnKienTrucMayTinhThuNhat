@@ -1,5 +1,11 @@
-#include "Qfloat.h"
-
+﻿#include "Qfloat.h"
+bool KTraBitGiongNhau(string s, char c)
+{
+	for (int i = 0; i < s.size(); i++)
+		if (s[i] != c)
+			return false;
+	return true;
+}
 string reverse(string s) {
 	string result;
 	for (int i = s.length() - 1; i >= 0; i--) {
@@ -108,6 +114,110 @@ string chia2_thapphan(string so) {
 	}
 	return s;
 }
+string Cong(string a, string b)
+{
+	int i = a.size() - 1;
+	int j = b.size() - 1;
+	string KetQua = "";
+	int temp = 0;
+	while (i >= 0 || j >= 0)
+	{
+		int x = (i >= 0) ? a[i] - '0' : 0;
+		int y = (j >= 0) ? b[j] - '0' : 0;
+		int Tong = x + y + temp;
+		temp = Tong / 10;
+		KetQua = (char)(Tong % 10 + '0') + KetQua;
+		if (i >= 0)
+			i--;
+		if (j >= 0)
+			j--;
+	}
+	if (temp > 0)
+		KetQua = (char)(temp + '0') + KetQua;
+	return KetQua;
+}
+void ChuanHoa(string &a, string &b)
+{
+	int dodai1 = a.size();
+	int dodai2 = b.size();
+	if (dodai1 >= dodai2)
+	{
+		b.insert(0, dodai1 - dodai2, '0');
+	}
+	else
+	{
+		a.insert(0, dodai2 - dodai1, '0');
+	}
+}
+void ChuanHoaSo0(string &a)
+{
+	int i = 0;
+	if (a[i] == '0')
+	{
+		if (a == "0") return;
+		while (a[i] == '0')
+		{
+			a.erase(a.begin() + i);
+		}
+	}
+	else
+		return;
+}
+void ChuanHoaBit(string &a)
+{
+	for (int i = 0; i < a.size(); i++)
+	{
+		if (a[i] == ' ')
+		{
+			a.erase(a.begin() + i);
+		}
+	}
+}
+void ChuanHoaTP(string &a, string &b)
+{
+	int dodai1 = a.size();
+	int dodai2 = b.size();
+	if (dodai1 >= dodai2)
+	{
+		while (dodai1 > dodai2)
+		{
+			b += '0';
+			dodai2++;
+		}
+	}
+	else
+	{
+		while (dodai2 > dodai1)
+		{
+			a += '0';
+			dodai1++;
+		}
+	}
+}
+string CongTP(string a, string b)
+{
+	string KetQua = "";
+	ChuanHoaTP(a, b);
+	int temp = 0;
+	for (int i = a.size() - 1; i >= 0; i--)
+	{
+		if (a[i] == '.')
+		{
+			KetQua = '.' + KetQua;
+		}
+		else
+		{
+			temp = a[i] - '0' + b[i] - '0' + temp;
+			KetQua.insert(0, 1, (char)(temp % 10 + 48));
+			temp /= 10;
+		}
+	}
+	if (temp > 0)
+	{
+		KetQua.insert(0, 1, (char)(temp + 48));
+	}
+	return KetQua;
+}
 Qfloat::Qfloat() {
 	data[0] = data[1] = data[2] = data[3] = data[4] = 0;
 }
@@ -139,14 +249,6 @@ void Qfloat::ScanQfloat()
 	}
 }
 
-void Qfloat::PrintQfloat(Qfloat x)
-{
-}
-
-Qfloat Qfloat::BinToDec(int* data)
-{
-	
-}
 
 string Qfloat::DecToBin(string num)
 {
@@ -257,4 +359,148 @@ string Qfloat::DecToBin(string num)
 		}
 	}
 	return s + " " + e + " " + m;
+}
+string Qfloat::BinToDec(string s)
+{
+	ChuanHoaBit(s);
+	if (s.size() != 32) //128
+		return "Du lieu sai!";
+	for (int i = 0; i < s.size(); i++)
+	{
+		if (s[i] != '0' && s[i] != '1')
+			return "Du lieu sai!";
+	}
+
+	string Sign = s.substr(0, 1);
+	string Exp = s.substr(1, 8); //1, 15
+	string M = s.substr(9, 23);// 16,112
+	string Dau = "";
+	if (Sign == "1")
+		Dau = "-";
+	//Kiểm tra trường hợp đặc biệt
+	if (KTraBitGiongNhau(Exp, '0'))
+	{
+		if (KTraBitGiongNhau(M, '0'))
+		{
+			return "0";
+		}
+		else
+		{
+			return "So khong the chuan hoa!";
+		}
+	}
+	if (KTraBitGiongNhau(Exp, '1'))
+	{
+		if (KTraBitGiongNhau(M, '0'))
+		{
+			return "So vo cung!";
+		}
+		else
+		{
+			return "So bao loi!";
+		}
+	}
+
+	//Tính giá trị Exp;
+	string ExpDec = "0";
+	string temp = "1";
+	if (Exp[Exp.size() - 1] == '1')
+		ExpDec = "1";
+	for (int i = Exp.size() - 2; i >= 0; i--)
+	{
+		temp = nhan2(temp);
+		if (Exp[i] == '1')
+		{
+			ExpDec = Cong(ExpDec, temp);
+		}
+	}
+	//CHuyển giá trị sang int 
+	int _Exp = 0;
+	for (int i = 0; i < ExpDec.size(); i++)
+	{
+		_Exp = _Exp * 10 + ExpDec[i] - '0';
+	}
+	int E = _Exp - 127;//K
+
+	//Tìm phần nguyên và phần thập phân ở hệ 2
+	string IntBin = "1";
+	string FracBin = M;
+	while (E != 0)
+	{
+		if (E > 0)
+		{
+			IntBin += FracBin[0];
+			FracBin.erase(0, 1);
+			FracBin += '0';
+			E--;
+		}
+		else
+		{
+			FracBin = IntBin[IntBin.size() - 1] + FracBin;
+			IntBin.erase(IntBin.size() - 1, 1);
+			IntBin = '0' + IntBin;
+			E++;
+		}
+	}
+	//Xóa số 0 dư trước phần nguyên và số 0 dư sau phần thập phân
+	ChuanHoaSo0(IntBin);
+	while (FracBin.size() > 1 && FracBin[FracBin.size() - 1] == '0')
+		FracBin.erase(FracBin.size() - 1, 1);
+
+	//Chuyển phần nguyên sang hệ 10
+	string IntDec = "0";
+	temp = "1";
+	if (IntBin[IntBin.size() - 1] == '1')
+		IntDec = "1";
+	if (IntBin.size() > 1)
+	{
+		for (int i = IntBin.size() - 2; i >= 0; i--)
+		{
+			temp = nhan2(temp);
+			if (IntBin[i] == '1')
+			{
+				IntDec = Cong(IntDec, temp);
+			}
+		}
+	}
+	//Chuyển phần thập phân sang hệ 10
+	string FracDec = "0.0";
+	temp = "1";
+	for (int i = 0; i < FracBin.size(); i++)
+	{
+		temp = chia2_thapphan(temp);
+		if (FracBin[i] == '1')
+		{
+			FracDec = CongTP(FracDec, temp);
+		}
+	}
+	FracDec = FracDec.substr(2, FracDec.size() - 2);
+	string KetQua = "";
+	if (FracDec == "0")
+		KetQua = IntDec;
+	else
+		KetQua = Dau + IntDec + '.' + FracDec;
+	return KetQua;
+}
+
+void Qfloat::PrintQfloat()
+{
+	string s = "";
+	for (int i = 0; i < 128; i++)
+	{
+		if (getBit(i))
+		{
+			s += '1';
+		}
+		else
+			s += '0';
+	}
+	string KetQua = BinToDec(s);
+	cout << KetQua << endl;
+}
+Qfloat Qfloat::operator=(Qfloat x)
+{
+	for (int i = 0; i < 4; i++)
+		this->data[i] = x.data[i];
+	return *this;
 }
