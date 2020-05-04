@@ -2,8 +2,7 @@
 #include "Qfloat.h"
 int main()
 {
-
-	QInt a, b;
-	return 0;
-
+	Qfloat a;
+	a.ScanQfloat();
+	a.PrintQfloat();
 }
