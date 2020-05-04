@@ -262,7 +262,6 @@ void Qfloat::ScanQfloat()
 	cin >> num;
 	//Dua bit vao data
 	string result = DecToBin(num);
-	//cout << result << endl;
 	//Kiem tra truong hop dac biet
 	//string result = "01111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
 	//string result = "000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
@@ -326,8 +325,6 @@ string Qfloat::DecToBin(string num)
 		np_nguyen += '0';
 	else
 		vt_1 = 0;
-	
-	
 	string np_tp = "";
 	string thapphan = "0" + num.substr(index);
 	int somu;
@@ -406,20 +403,20 @@ string Qfloat::DecToBin(string num)
 	}
 
 	//Luu vo bien np
-	string np;
-	if(num[0]=='-')
+	string np = np_nguyen +"."+ np_tp;
+	/*if(num[0]=='-')
 	{
 		np = '-' + np_nguyen + '.' + np_tp;
 	}
 	else
 	  np = np_nguyen + "." + np_tp;
-	//cout << np << endl;
-	
+	*/
+
 	//
 	string s = "";
 	string e = "";
 	string m = "";
-	if (num[0] == '	-')
+	if (num[0] == '-')
 		s += '1';
 	else
 		s += '0';
@@ -597,7 +594,7 @@ string Qfloat::BinToDec(string s)
 	FracDec = FracDec.substr(2, FracDec.size() - 2);
 	string KetQua = "";
 	if (FracDec == "0")
-		KetQua = IntDec;
+		KetQua = Dau + IntDec;
 	else
 		KetQua = Dau + IntDec + '.' + FracDec;
 	return KetQua;
