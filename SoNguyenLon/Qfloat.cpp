@@ -290,9 +290,19 @@ void Qfloat::ScanQfloat()
 }
 string Qfloat::DecToBin(string num)
 {
-	if(num=="0") {
+	//Kiem tra so nhap vao phai 0 khong?
+	bool check = true;
+	for(int i=0;i<num.length();i++){
+		if(num[i]!='.') {
+			if (num[i] != '0'){
+				check = false;
+				break;
+			}	
+		}
+	}
+	if (check) {
 		string s;
-		for (int i = 0; i < 128;i++) {
+		for (int i = 0; i < 128; i++) {
 			s += '0';
 		}
 		return s;
